@@ -59,6 +59,6 @@ By default, Expo creates this as nested class into `MainApplication`, but I pref
 method to register `FormDataPackage`.
 
 ### 5. Create/update MainApplication class
-For the debug project I created separate [com.simeonkirov.expodebug.DebugMainApplication](android/app/debug/java/com/simeonkirov/expodebug/DebugMainApplication)
+For the debug project I created separate [com.simeonkirov.expodebug.DebugMainApplication](android/app/src/debug/java/com/simeonkirov/expodebug/DebugApplication.java)
 class and registered it into [AndoridManifest.xml](android/app/debug/AndoridManifest.xml).
 
