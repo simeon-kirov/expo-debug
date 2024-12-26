@@ -36,4 +36,29 @@ For the fix I used the _debug_ variant of the application and the classes relate
 
 ### 3. Create React Module and Package
 We `NetworkingModule` which is created and registered in the MainPackage by the React application. You can get already
-instantiated `NativeModule`s  from `ReactContext`, but it appeared that getting `ReactContext` is not trivial.
+instantiated `NativeModule`s  from `ReactContext`, but it appeared that getting `ReactContext` is not trivial. Generally,
+it should be something like this:
+```java
+ReactInstanceManager reactInstanceManager = getReactNativeHost().getReactInstanceManager();
+reactInstanceManager.addReactInstanceEventListener(new ReactInstanceEventListener() {
+    @Override
+    public void onReactContextInitialized(@NonNull ReactContext reactContext) {
+        Log.v(LOG_TAG, "ReactApplicationContext initialized");
+    }
+});
+```
+
+This code should be run in `MainApplication.onCreate()`, but `ReactInstanceEventListener` is never invoked. To solve it
+I had to create new custom `NativeModule` and register it with the application. See `com.simeonkirov.expodebug.multipart.FormDataModule`
+and `com.simeonkirov.expodebug.multipart.FormDataPackage`. `FormDataModule` gets `ReactApplicationContext`, ensures that
+`ReactInstance` is initialized, gets the active `NetworkingModule` instance end register `FormDataRequestBodyHandler`
+with it.
+
+### 4. Create DebugReactNativeHost
+By default, Expo creates this as nested class into `MainApplication`, but I prefer to have it separately. Use `getPackages()`
+method to register `FormDataPackage`.
+
+### 5. Create/update MainApplication class
+For the debug project I created separate [com.simeonkirov.expodebug.DebugMainApplication](android/app/debug/java/com/simeonkirov/expodebug/DebugMainApplication)
+class and registered it into [AndoridManifest.xml](android/app/debug/AndoridManifest.xml).
+
