@@ -31,8 +31,9 @@ This will create android/ directory with the Android Gradle project.
 
 ### 2. Create `FormDataRequestBodyHandler`
 For the fix I used the _debug_ variant of the application and the classes related to the fix are into 
-`com.simeonkirov.expodebug.multipart` package. `FormDataRequestBodyHandler` class implements the actual fix into
-`getPartContentType(...)` method.
+[com.simeonkirov.expodebug.multipart](android/app/src/debug/java/com/simeonkirov/expodebug/multipart) package. 
+[FormDataRequestBodyHandler](android/app/src/debug/java/com/simeonkirov/expodebug/multipart/FormDataRequestBodyHandler.java)
+class implements the actual fix into `getPartContentType(...)` method.
 
 ### 3. Create React Module and Package
 We `NetworkingModule` which is created and registered in the MainPackage by the React application. You can get already
@@ -49,9 +50,11 @@ reactInstanceManager.addReactInstanceEventListener(new ReactInstanceEventListene
 ```
 
 This code should be run in `MainApplication.onCreate()`, but `ReactInstanceEventListener` is never invoked. To solve it
-I had to create new custom `NativeModule` and register it with the application. See `com.simeonkirov.expodebug.multipart.FormDataModule`
-and `com.simeonkirov.expodebug.multipart.FormDataPackage`. `FormDataModule` gets `ReactApplicationContext`, ensures that
-`ReactInstance` is initialized, gets the active `NetworkingModule` instance end register `FormDataRequestBodyHandler`
+I had to create new custom `NativeModule` and register it with the application. See 
+[FormDataModule](android/app/src/debug/java/com/simeonkirov/expodebug/multipart/FormDataModule.java)
+and [FormDataPackage](android/app/src/debug/java/com/simeonkirov/expodebug/multipart/FormDataPackage.java). 
+`FormDataModule` gets `ReactApplicationContext`, ensures that `ReactInstance` is initialized, gets the active 
+`NetworkingModule` instance end register `FormDataRequestBodyHandler`
 with it.
 
 ### 4. Create DebugReactNativeHost
@@ -59,6 +62,6 @@ By default, Expo creates this as nested class into `MainApplication`, but I pref
 method to register `FormDataPackage`.
 
 ### 5. Create/update MainApplication class
-For the debug project I created separate [com.simeonkirov.expodebug.DebugMainApplication](android/app/src/debug/java/com/simeonkirov/expodebug/DebugApplication.java)
-class and registered it into [AndoridManifest.xml](android/app/debug/AndoridManifest.xml).
+For the debug project I created separate [DebugMainApplication](android/app/src/debug/java/com/simeonkirov/expodebug/DebugApplication.java)
+class and registered it into [AndoridManifest.xml](android/app/src/debug/AndroidManifest.xml).
 
